@@ -26,7 +26,7 @@
 <body <?php body_class(get_bloginfo('language')); ?>>
 	<header id="od-head">
 		<div class="container">
-			<div class="seven columns">
+			<div class="eight columns">
 				<div class="site-meta">
 					<?php opendev_logo(); ?>
 					<?php
@@ -39,7 +39,7 @@
 							if($logo)
 								$name = $logo;
 							echo '<div class="ms-dropdown-title">';
-							echo '<h2>' . $name . '<span class="icon-arrow-down5"></span></h2>';
+							echo '<h2 class="side-title">' . $name . '<span class="icon-arrow-down5"></span></h2>';
 							echo '<ul>';
 							foreach($sites as $site) {
 								if($current != $site['blog_id']) {
@@ -55,7 +55,7 @@
 					?>
 				</div>
 			</div>
-			<div class="five columns">
+			<div class="four columns">
 				<div id="od-head-nav">
 					<div class="clearfix">
 						<nav id="social-nav">
@@ -88,6 +88,13 @@
 				</div>
 			</div>
 		</div>
+		<nav id="ms-nav">
+			<div class="container">
+				<div class="twelve columns">
+					<?php opendev_ms_nav(); ?>
+				</div>
+			</div>
+		</nav>
 		<nav id="main-nav">
 			<div class="container">
 				<div class="twelve columns">

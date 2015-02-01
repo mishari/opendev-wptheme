@@ -18,18 +18,6 @@
 			activeIcon = new icon(opendev_markers.marker_active),
 			activeMarker;
 
-		// setup sidebar
-		if(!map.conf.disableSidebar) {
-			if($('.viewing-post').length) {
-				map.$.sidebar = $('.viewing-post');
-			} else {
-				map.$.parents('.map-container').wrapAll('<div class="content-map" />');
-				map.$.parents('.content-map').prepend('<div class="map-sidebar"><div class="sidebar-inner"></div></div>');
-				map.$.sidebar = map.$.parents('.content-map').find('.sidebar-inner');
-			}
-			map.invalidateSize(true);
-		}
-
 		if(typeof jeo.fragment === 'function' && !map.conf.disableHash)
 			fragment = jeo.fragment();
 
@@ -105,7 +93,9 @@
 					});
 					l.on('click', function(e) {
 						jeo.runCallbacks('markerClicked', [e]);
-						markers.openMarker(e.target, false);
+						console.log(e.target);
+						//markers.openMarker(e.target, false);
+						window.location = e.target.feature.properties.permalink;
 						return false;
 					});
 
@@ -318,7 +308,7 @@
 			if(map.$.sidebar && map.$.sidebar.length) {
 
 				var permalink_slug = marker.properties.permalink.replace(opendev_markers.site_url, '');
-				marker.properties.permalink = opendev_markers.site_url + opendev_markers.language + '/' + permalink_slug;
+				marker.properties.permalink = opendev_markers.site_url + '/' + permalink_slug;
 
 				if(!map.$.sidebar.story) {
 					map.$.sidebar.append('<div class="story" />');
@@ -449,7 +439,8 @@
 				}
 			}
 
-			map.$.sidebar.addClass('active');
+			if(map.$.sidebar && map.$.sidebar.length)
+				map.$.sidebar.addClass('active');
 
 			jeo.runCallbacks('markerOpened', [map]);
 

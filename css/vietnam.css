@@ -1,23 +1,26 @@
 #od-head {
-	background: #234956;
+	background: #3b2226;
 	color: #f0f0f0;
+}
+
+#od-head #ms-nav {
+	background: #4b2f34;
 }
 
 #od-head h1 a,
 #od-head h1 span {
 	text-decoration: none;
-	color: #A4CE39;
+	color: #d61e2a;
 }
 
 #od-head h2,
 #od-head a,
-#od-head p,
 #od-head span {
 	color: #fff;
 }
 
 #od-head .ms-dropdown-title ul {
-	background: #234956;
+	background: #3b2226;
 }
 
 #od-head .ms-dropdown-title ul li {

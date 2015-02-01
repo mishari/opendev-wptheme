@@ -18,15 +18,21 @@ if($sticky->have_posts()) :
 								</div>
 							<?php endif; ?>
 							<h2><?php the_title(); ?></h2>
+							<p class="date"><?php echo get_the_date(); ?></p>
+							<a class="link" href="<?php the_permalink(); ?>"></a>
 						</header>
 						<section class="post-content">
 							<?php the_excerpt(); ?>
 						</section>
 					</div>
+					<?php
+					/*
 					<footer class="post-actions">
-						<a class="button" href="<?php the_permalink(); ?>"><?php _e('Read more', 'infoamazonia'); ?></a>
-						<a class="button share-button" href="<?php echo jeo_get_share_url(array('p' => get_the_ID())); ?>"><?php _e('Share', 'infoamazonia'); ?></a>
+						<a class="button" href="<?php the_permalink(); ?>"><?php _e('Read more', 'opendev'); ?></a>
+						<a class="button share-button" href="<?php echo jeo_get_share_url(array('p' => get_the_ID())); ?>"><?php _e('Share', 'opendev'); ?></a>
 					</footer>
+					*/
+					?>
 				</article>
 			</div>
 		<?php endwhile; ?>

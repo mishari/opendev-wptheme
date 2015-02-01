@@ -12,7 +12,7 @@ if(is_front_page()) {
 					<p>Lorem ipsum dolor sit</p>
 				</div>
 				<div class="four columns">
-					<p class="icon-database"></p>
+					<p class="icon-archive"></p>
 					<h3>Introduction text 2</h3>
 					<p>Lorem ipsum dolor sit</p>
 				</div>
@@ -51,39 +51,80 @@ if(is_front_page()) {
 		</div>
 	</section>
 	<div class="container">
-		<div class="nine columns">
-			<section id="briefs" class="page-section">
-				<div class="section-title">
-					<h2><?php _e('Issue briefs', 'opendev'); ?></h2>
-				</div>
-				<?php for($i = 1; $i <= 3; $i++) { ?>
-					<article id="brief-<?php echo $i; ?>" class="row">
-						<div class="two columns alpha">
-							<img src="http://lorempixum.com/400/400/?<?php echo $i; ?>" class="scale-with-grid" />
-						</div>
-						<div class="three columns">
-							<h3>A Brief</h3>
-						</div>
-						<div class="four columns omega">
-							<p>Lorem ipsum</p>
-						</div>
-					</article>
-				<?php } ?>
-			</section>
-		</div>
+		<?php
+		$briefing_query = new WP_Query(array('post_type' => 'briefing', 'posts_per_page' => 5));
+		if($briefing_query->have_posts()) :
+			?>
+			<div class="nine columns">
+				<section id="briefs" class="list">
+					<div class="section-title">
+						<h2><a href="<?php echo get_post_type_archive_link('briefing'); ?>"><?php _e('Issue briefs', 'opendev'); ?></a></h2>
+					</div>
+					<?php
+					while($briefing_query->have_posts()) :
+						$briefing_query->the_post();
+						?>
+						<article id="briefing-<?php the_ID(); ?>" class="row">
+							<header>
+								<div class="two columns alpha">
+									<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('thumbnail'); ?></a>
+								</div>
+								<div class="three columns">
+									<h3><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></h3>
+									<p><span class="icon-calendar"></span> <?php echo get_the_date(); ?></p>
+									<p><span class="icon-user"></span> <?php the_author(); ?></p>
+								</div>
+							</header>
+							<div class="four columns omega">
+								<?php the_excerpt(); ?>
+							</div>
+						</article>
+					<?php endwhile; ?>
+				</section>
+			</div>
+			<?php endif; ?>
 		<div class="three columns">
-			<section id="site-updates">
-				<div class="section-title">
-					<h2><?php _e('Site updates', 'opendev'); ?></h2>
-				</div>
-				<h3>Um</h3>
-			</section>
-			<section id="events">
-				<div class="section-title">
-					<h2><?php _e('Events and opportunities', 'opendev'); ?></h2>
-				</div>
-				<h3>Um</h3>
-			</section>
+			<?php
+			$updates_query = new WP_Query(array('post_type' => 'site-update', 'posts_per_page' => 5));
+			if($updates_query->have_posts()) :
+				?>
+				<section id="site-updates">
+					<div class="section-title">
+						<h2><?php _e('Site updates', 'opendev'); ?></h2>
+					</div>
+					<div class="update-list">
+						<?php
+						while($updates_query->have_posts()) :
+							$updates_query->the_post();
+							?>
+							<article id="update-<?php the_ID(); ?>">
+								<h3><span class="date"><?php echo get_the_date(); ?></span> <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></h3>
+							</article>
+						<?php endwhile; ?>
+					</div>
+				</section>
+			<?php endif; ?>
+			<?php
+			$updates_query = new WP_Query(array('post_type' => 'announcement', 'posts_per_page' => 5));
+			if($updates_query->have_posts()) :
+				?>
+				<section id="announcements">
+					<div class="section-title">
+						<h2><?php _e('Events and opportunities', 'opendev'); ?></h2>
+					</div>
+					<div class="announce-list">
+						<?php
+						while($updates_query->have_posts()) :
+							$updates_query->the_post();
+							?>
+							<article id="announcement-<?php the_ID(); ?>">
+								<p class="date"><?php echo get_the_date(); ?></p>
+								<h3><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></h3>
+							</article>
+						<?php endwhile; ?>
+					</div>
+				</section>
+			<?php endif; ?>
 		</div>
 	</div>
 
