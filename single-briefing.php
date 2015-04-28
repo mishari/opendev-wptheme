@@ -5,7 +5,7 @@
 	<article id="content" class="single-post">
 		<header class="single-post-header" class="clearfix">
 			<div class="container">
-				<div class="eight columns">
+				<div class="twelve columns">
 					<?php the_category(); ?>
 					<h1><?php the_title(); ?></h1>
 				</div>
@@ -17,7 +17,7 @@
 			<section id="featured-media" class="row">
 				<div class="container">
 					<div class="twelve columns">
-						<div style="height:500px;">
+						<div style="height:400px;">
 							<?php jeo_map(); ?>
 						</div>
 					</div>
@@ -46,7 +46,7 @@
 				<div class="three columns offset-by-one">
 					<aside id="sidebar">
 						<ul class="widgets">
-							<li class="widget">
+							<li class="widget share-widget">
 								<div class="share clearfix">
 									<ul>
 										<li>
@@ -64,7 +64,7 @@
 							<li class="widget">
 								<?php opendev_summary(); ?>
 							</li>
-							<?php dynamic_sidebar('post'); ?>
+							<?php dynamic_sidebar('briefing'); ?>
 						</ul>
 					</aside>
 				</div>

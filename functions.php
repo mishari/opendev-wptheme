@@ -27,6 +27,30 @@ require_once(STYLESHEETPATH . '/inc/live-search/live-search.php');
 // Interactive map
 require_once(STYLESHEETPATH . '/inc/interactive-map.php');
 
+// Category widget
+require_once(STYLESHEETPATH . '/inc/category-widget.php');
+
+// Related resources
+require_once(STYLESHEETPATH . '/inc/related-resources-widget.php');
+
+// Advanced nav
+require_once(STYLESHEETPATH . '/inc/advanced-navigation.php');
+
+// Advanced nav
+require_once(STYLESHEETPATH . '/inc/category-walker.php');
+
+function opendev_setup_theme() {
+
+	register_sidebar(array(
+		'name' => __('Briefing sidebar', 'jeo'),
+		'id' => 'briefing',
+		'before_title' => '<h2 class="widget-title">',
+		'after_title' => '</h2>'
+	));
+
+}
+add_action('after_setup_theme', 'opendev_setup_theme');
+
 function opendev_styles() {
 
 	$options = get_option('opendev_options');
@@ -207,92 +231,90 @@ function opendev_ms_nav() {
 			<ul class="ms-nav">
 				<?php
 				foreach($sites as $site) {
-					if($current != $site['blog_id']) {
-						$details = get_blog_details($site['blog_id']);
-						$name = str_replace('Open Development ', '', $details->blogname);
-						$siteurl = $details->siteurl;
-						switch_to_blog($site['blog_id']);
-						?>
-						<li class="site-item">
-							<a href="<?php echo $siteurl; ?>"><?php echo $name; ?></a>
-							<div class="sub-menu">
-								<ul class="first-menu">
-									<li data-content="news"><a href="<?php echo $siteurl; ?>">
-										<span class="icon-text"></span> <?php _e('News', 'opendev'); ?>
-									</a></li>
-									<li data-content="issues"><a href="<?php echo get_post_type_archive_link('briefing'); ?>">
-										<span class="icon-docs"></span> <?php _e('Issues', 'opendev'); ?>
-									</a></li>
-									<li data-content="maps"><a href="<?php echo get_post_type_archive_link('map'); ?>">
-										<span class="icon-map"></span> <?php _e('Maps', 'opendev'); ?>
+					$details = get_blog_details($site['blog_id']);
+					$name = str_replace('Open Development ', '', $details->blogname);
+					$siteurl = $details->siteurl;
+					switch_to_blog($site['blog_id']);
+					?>
+					<li class="site-item">
+						<a href="<?php echo $siteurl; ?>"><?php echo $name; ?></a>
+						<div class="sub-menu">
+							<ul class="first-menu">
+								<li data-content="news"><a href="<?php echo $siteurl; ?>">
+									<span class="icon-text"></span> <?php _e('News', 'opendev'); ?>
+								</a></li>
+								<li data-content="issues"><a href="<?php echo get_post_type_archive_link('briefing'); ?>">
+									<span class="icon-docs"></span> <?php _e('Issues', 'opendev'); ?>
+								</a></li>
+								<li data-content="maps"><a href="<?php echo get_post_type_archive_link('map'); ?>">
+									<span class="icon-map"></span> <?php _e('Maps', 'opendev'); ?>
+								</a></li>
+								<?php
+								$data_page_id = opendev_get_data_page_id();
+								if($data_page_id) :
+									?>
+									<li data-content="data"><a href="<?php echo get_permalink($data_page_id); ?>">
+										<span class="icon-archive"></span> <?php _e('Data', 'opendev'); ?>
 									</a></li>
 									<?php
-									$data_page_id = opendev_get_data_page_id();
-									if($data_page_id) :
-										?>
-										<li data-content="data"><a href="<?php echo get_permalink($data_page_id); ?>">
-											<span class="icon-archive"></span> <?php _e('Data', 'opendev'); ?>
-										</a></li>
-										<?php
-									endif;
-									?>
-								</ul>
-								<div class="content">
+								endif;
+								?>
+							</ul>
+							<div class="content">
 
-									<?php query_posts(array('posts_per_page' => 3, 'without_map_query' => true)); ?>
-									<?php if(have_posts()) : ?>
-										<div class="news content-item">
-											<h2><?php _e('Latest news', 'opendev'); ?></h2>
-											<ul>
-												<?php while(have_posts()) : the_post(); ?>
-													<li>
-														<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-														<?php the_excerpt(); ?>
-													</li>
-												<?php endwhile; ?>
-											</ul>
-										</div>
-									<?php endif; ?>
-									<?php wp_reset_query(); ?>
+								<?php query_posts(array('posts_per_page' => 3, 'without_map_query' => true)); ?>
+								<?php if(have_posts()) : ?>
+									<div class="news content-item">
+										<h2><?php _e('Latest news', 'opendev'); ?></h2>
+										<ul>
+											<?php while(have_posts()) : the_post(); ?>
+												<li>
+													<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+													<?php the_excerpt(); ?>
+												</li>
+											<?php endwhile; ?>
+										</ul>
+									</div>
+								<?php endif; ?>
+								<?php wp_reset_query(); ?>
 
-									<?php query_posts(array('post_type' => 'briefing', 'posts_per_page' => 3, 'without_map_query' => true)); ?>
-									<?php if(have_posts()) : ?>
-										<div class="issues content-item">
-											<h2><?php _e('Latest issues', 'opendev'); ?></h2>
-											<ul>
-												<?php while(have_posts()) : the_post(); ?>
-													<li>
-														<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-														<?php the_excerpt(); ?>
-													</li>
-												<?php endwhile; ?>
-											</ul>
-										</div>
-									<?php endif; ?>
-									<?php wp_reset_query(); ?>
+								<?php query_posts(array('post_type' => 'briefing', 'posts_per_page' => 3, 'without_map_query' => true)); ?>
+								<?php if(have_posts()) : ?>
+									<div class="issues content-item">
+										<h2><?php _e('Latest issues', 'opendev'); ?></h2>
+										<ul>
+											<?php while(have_posts()) : the_post(); ?>
+												<li>
+													<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+													<?php the_excerpt(); ?>
+												</li>
+											<?php endwhile; ?>
+										</ul>
+									</div>
+								<?php endif; ?>
+								<?php wp_reset_query(); ?>
 
-									<?php query_posts(array('post_type' => 'map', 'posts_per_page' => 3, 'without_map_query' => true)); ?>
-									<?php if(have_posts()) : ?>
-										<div class="maps content-item">
-											<h2><?php _e('Latest maps', 'opendev'); ?></h2>
-											<ul>
-												<?php while(have_posts()) : the_post(); ?>
-													<li>
-														<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-														<?php the_excerpt(); ?>
-													</li>
-												<?php endwhile; ?>
-											</ul>
-										</div>
-									<?php endif; ?>
-									<?php wp_reset_query(); ?>
+								<?php query_posts(array('post_type' => 'map', 'posts_per_page' => 3, 'without_map_query' => true)); ?>
+								<?php if(have_posts()) : ?>
+									<div class="maps content-item">
+										<h2><?php _e('Latest maps', 'opendev'); ?></h2>
+										<ul>
+											<?php while(have_posts()) : the_post(); ?>
+												<li>
+													<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+													<?php the_excerpt(); ?>
+												</li>
+											<?php endwhile; ?>
+										</ul>
+									</div>
+								<?php endif; ?>
+								<?php wp_reset_query(); ?>
 
-								</div>
 							</div>
-						</li>
-						<?php
-						restore_current_blog();
-					}
+						</div>
+					</li>
+					<?php
+					restore_current_blog();
 				}
 				?>
 			</ul>
@@ -339,6 +361,12 @@ function opendev_wpckan_post_types() {
 	return array('post','page','briefing','layer');
 }
 add_filter('wpckan_post_types', 'opendev_wpckan_post_types');
+
+if(!function_exists('IsNullOrEmptyString')) {
+	function IsNullOrEmptyString($question){
+		return (!isset($question) || trim($question)==='');
+	}
+}
 
 function opendev_get_related_datasets($atts = false) {
 
@@ -414,3 +442,102 @@ function opendev_wpckan_api_query_datasets($atts) {
 	return $response;
 
 }
+
+// Disable mousewheel zoom by default
+function opendev_map_data($data) {
+	$data['disable_mousewheel'] = true;
+	return $data;
+}
+add_filter('jeo_map_data', 'opendev_map_data');
+add_filter('jeo_mapgroup_data', 'opendev_map_data');
+
+function opendev_custom_admin_css() {
+	?>
+	<style>
+		.handlers.map-setting { display: none !important; }
+	</style>
+	<?php
+}
+add_action('admin_footer', 'opendev_custom_admin_css');
+
+function opendev_search_pre_get_posts($query) {
+	if(!is_admin() && ($query->is_search || get_query_var('opendev_advanced_nav') || $query->is_tax || $query->is_category || $query->is_tag)) {
+		$query->set('post_type', get_post_types(array('public' => true)));
+	}
+}
+add_action('pre_get_posts', 'opendev_search_pre_get_posts');
+
+function opendev_category_pre_get_posts($query) {
+	if($query->is_category) {
+		$post_type = isset($_GET['post_type']) ? $_GET['post_type'] : 'post';
+		$query->set('post_type', array($post_type));
+	}
+}
+add_action('pre_get_posts', 'opendev_category_pre_get_posts', 20, 1);
+
+
+function opendev_posts_clauses_join($join) {
+
+	global $wpdb;
+
+	$join = " INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id) ";
+
+	return $join;
+}
+//add_filter('jeo_posts_clauses_join', 'opendev_posts_clauses_join');
+
+function opendev_posts_clauses_where($where) {
+
+	$map_id = jeo_get_map_id();
+
+	$where = '';
+
+	// MAP
+	if(get_post_type($map_id) == 'map') {
+
+		$where = " AND ( m_maps.meta_key = 'maps' AND CAST(m_maps.meta_value AS CHAR) = '{$map_id}' ) ";
+
+	// MAPGROUP
+	} elseif(get_post_type($map_id) == 'map-group') {
+
+		$groupdata = get_post_meta($map_id, 'mapgroup_data', true);
+
+		if(isset($groupdata['maps']) && is_array($groupdata['maps'])) {
+
+			$where = " AND ( ";
+
+			$size = count($groupdata['maps']);
+			$i = 1;
+
+			foreach($groupdata['maps'] as $m) {
+
+				$c_map_id = $m['id'];
+
+				$where .= " ( m_maps.meta_key = 'maps' AND CAST(m_maps.meta_value AS CHAR) = '{$c_map_id}' ) ";
+
+				if($i < $size) {
+					$where .= ' OR ';
+				}
+
+				$i++;
+
+			}
+
+			$where .= " ) ";
+
+		}
+
+	}
+
+	return $where;
+}
+//add_filter('jeo_posts_clauses_where', 'opendev_posts_clauses_where');
+
+
+
+function opendev_ignore_sticky($query) {
+	if($query->is_main_query()) {
+		$query->set('ignore_sticky_posts', true);
+	}
+}
+add_action('pre_get_posts', 'opendev_ignore_sticky');

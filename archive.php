@@ -1,4 +1,10 @@
-<?php get_header(); ?>
+<?php
+if(is_category()) {
+	include_once(STYLESHEETPATH . '/category.php');
+	die();
+}
+get_header();
+?>
 
 <div class="section-title">
 	<div class="container">
@@ -18,6 +24,7 @@
 						_e( 'Archives', 'jeo' );
 					endif;
 				?></h1>
+				<?php get_template_part('section', 'query-actions'); ?>
 		</div>
 	</div>
 </div>
